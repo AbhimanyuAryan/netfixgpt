@@ -123,7 +123,7 @@ def scrape_movie_data(year):
         
 
     
-for year in range(2022, 2025):
+for year in range(2020, 2025):
     scrape_movie_data(year)
 
 
