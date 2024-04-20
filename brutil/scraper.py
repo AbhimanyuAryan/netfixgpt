@@ -3,15 +3,7 @@ from bs4 import BeautifulSoup
 import json
 import os
 from urllib.parse import unquote
-import unidecode
-import re
 
-def clean_text(text):
-    # Remove acentos e substitui caracteres especiais
-    text = unidecode.unidecode(text)
-    # Substitui caracteres especiais restantes por ''
-    text = re.sub(r'[^\w\s]', '', text)
-    return text
 
 def scrape_movie_data(year):
     if not os.path.exists("./brutil/tmp"):
