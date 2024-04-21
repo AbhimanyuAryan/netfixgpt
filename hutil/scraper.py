@@ -4,12 +4,10 @@ import json
 import os
 from urllib.parse import unquote
 
-def extract_movie_details(url):
+""" def extract_movie_details(url):
 
-    """
-    This function takes in a url for a movie's wikipedia page then extracts
-    all the movie's details into a dictionary
-    """ 
+    
+    
     #extract web site content
     html = requests.get(url)    
     
@@ -80,6 +78,7 @@ def extract_movie_details(url):
     else:
         return None
 
+ """
 
 def scrape_movie_data(year):
     if not os.path.exists("./hutil/tmp"):
@@ -111,12 +110,20 @@ def scrape_movie_data(year):
 
         for url,title in data:
             print(f"{year} - {url}")
-            info_movie  = extract_movie_details('https://en.wikipedia.org' + url)
-            if info_movie is not None:
+            response = requests.get('https://en.wikipedia.org' + url)
+            if response.status_code == 200:
+                html_content = response.text
+                soup = BeautifulSoup(html_content, 'html.parser')
                 json_filename = f"{title.replace('/', '-')}.json"
+                page_content = soup.get_text()
+                page_data = {
+                    "title": title,
+                    "content": page_content
+                }
                 with open(os.path.join("./hutil/tmp", json_filename), "w") as file:
-                    json.dump(info_movie, file, indent=4)
-        
+                    json.dump(page_data, file, indent=4)
+            else:
+                print("Error:", response.status_code)
     
          
 
