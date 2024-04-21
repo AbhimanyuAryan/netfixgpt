@@ -1,7 +1,6 @@
 import os
 import requests
 from bs4 import BeautifulSoup
-import json
 
 def scrape_movie_data():
     # Create a directory named "tmp" if it doesn't exist
@@ -30,19 +29,29 @@ def scrape_movie_data():
 
     for link in movie_links:
         page_url = base_url + link
-        response = requests.get(page_url)
-        if response.status_code == 200:
-            html_content = response.text
-            soup = BeautifulSoup(html_content, 'html.parser')
-            title = soup.find('h1', class_='firstHeading').text
-            # Replace '/' character with '-'
-            json_filename = f"{title.replace('/', '-')}.json"
-            page_content = soup.get_text()
-            page_data = {
-                "title": title,
-                "content": page_content
-            }
-            with open(os.path.join("tmp", json_filename), "w") as file:
-                json.dump(page_data, file, indent=4)
-        else:
-            print("Error:", response.status_code)
+        # Extract title from the link
+        title = link.split('/')[-1]
+        title = title.replace('_', ' ')
+        # Save PDF file using get_wikipedia_page_as_pdf function
+        get_wikipedia_page_as_pdf(title)
+
+def get_wikipedia_page_as_pdf(title, format='a4', type='desktop'):
+    base_url = 'https://en.wikipedia.org/api/rest_v1'
+    endpoint = f'/page/pdf/{title}/{format}/{type}'
+    url = base_url + endpoint
+
+    response = requests.get(url)
+    if response.status_code == 200:
+        # Save the PDF file in the "tmp" directory
+        with open(os.path.join("tmp", f"{title}.pdf"), "wb") as f:
+            f.write(response.content)
+        print(f"PDF for '{title}' saved successfully.")
+    elif response.status_code == 404:
+        print(f"Unknown page title: '{title}'.")
+    elif response.status_code == 503:
+        print("Service queue is busy or full.")
+    else:
+        print(f"An error occurred for page '{title}': {response.status_code}")
+
+# Call the function to scrape data and save PDF files
+scrape_movie_data()
