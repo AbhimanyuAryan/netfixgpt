@@ -1,9 +1,21 @@
-# Recommendation System for movies
+# Movie Recommendation System 
 
-- better recommedation for movies based on more context
-- personalized recommendation
-- latest movies also in list
-- db always upto date
+## Goals
+
+The goals set for this project are:
+- Better recommedations for movies based on more context
+- Personalized recommendations
+- Up-to-date information
+- In-depth information
+- More diverse and precise recommendations
+
+## Technologies
+
+- ChatGPT 3.5 Turbo 0125
+- Text-embedding-ada-002 V2
+- Llama Index
+- Python
+- Jupyter Notebooks
 
 ## License and Attribution
 
