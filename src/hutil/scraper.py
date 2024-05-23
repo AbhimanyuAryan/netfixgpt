@@ -1,137 +1,57 @@
+import os
 import requests
 from bs4 import BeautifulSoup
-import json
-import os
-from urllib.parse import unquote
 
-""" def extract_movie_details(url):
+def scrape_movie_data():
+    # Create a directory named "tmp" if it doesn't exist
+    if not os.path.exists("tmp"):
+        os.makedirs("tmp")
 
-    
-    
-    #extract web site content
-    html = requests.get(url)    
-    
-    if html.status_code == 200:
-        #create a soup object with html data
-        soup = BeautifulSoup(html.content,features='html.parser')   
-        #Removes all the superscript tags
-        for tag in soup.find_all("sup"):
-          tag.decompose()   
-        #find the info-box element
-        info_box = soup.find('table',{'class':'infobox vevent'})
+    movie_links = []
 
-        #extract all rows from info box table
-        if not info_box:
-            return None
-        rows = info_box.find_all('tr')  
-        #create empty dictionary to store movie info
-        movie_info = {} 
-        #loop through every row
-        for index,row in enumerate(rows):
+    # Iterate over the years from 2020 to 2024
+    for year in range(2020, 2025):
+        url = f"https://en.wikipedia.org/wiki/List_of_American_films_of_{year}"
+        response = requests.get(url)
+        html_content = response.text
+        soup = BeautifulSoup(html_content, 'html.parser')
+        wikitables = soup.find_all('table', class_='wikitable')
+        for table in wikitables:
+            rows = table.find_all('tr')
+            for row in rows:
+                first_td_with_a = row.find(lambda tag: tag.name == 'td' and tag.find('a'))
+                if first_td_with_a:
+                    first_a_tag = first_td_with_a.find('a')
+                    if first_a_tag:
+                        movie_links.append(first_a_tag['href'])
 
-          #retrieve movie title from first row
-          if index == 0:
-            movie_info["Title"] = row.find("th").getText()
+    base_url = "https://en.wikipedia.org"
 
-          else:
-            #check every other row for a header tag
-            header = row.find('th')
-            if header:
-              #assign the <th> element as a dictionary key
-              key = row.find('th').getText(" ")
-              if row.find('td'):
-                #assign <td> elements as the value
-                value = row.find("td").getText(" ").replace("\xa0","")
-              else:
-                #if it's  an <li> element, create list with all items and assign as the value
-                value = [item.getText() for item in row.find_all('li')]
+    for link in movie_links:
+        page_url = base_url + link
+        # Extract title from the link
+        title = link.split('/')[-1]
+        title = title.replace('_', ' ')
+        # Save PDF file using get_wikipedia_page_as_pdf function
+        get_wikipedia_page_as_pdf(title)
 
-              #assign the value variable as the dictionary value
-              movie_info[key] = value   
+def get_wikipedia_page_as_pdf(title, format='a4', type='desktop'):
+    base_url = 'https://en.wikipedia.org/api/rest_v1'
+    endpoint = f'/page/pdf/{title}/{format}/{type}'
+    url = base_url + endpoint
 
-        h2_elements = soup.find_all('h2')
-        sections = ["Plot", "Cast", "Production", "Release", "Reception"]
-        selected_h2_tags = [h2 for h2 in h2_elements if any(sec.lower() in h2.text.lower() for sec in sections)]
-
-
-        for h2 in selected_h2_tags:
-
-            title = h2.text.strip().replace("[edit]", "")
-
-            paragraphs = []
-
-            next_sibling = h2.find_next_sibling()
-
-            while next_sibling and next_sibling.name != 'h2':
-
-                if next_sibling.name == 'p':
-
-                    paragraphs.append(next_sibling.text.strip())
-                elif next_sibling.name == 'ul':
-                    paragraphs.extend([li.text.strip() for li in next_sibling.find_all('li')])
-
-                next_sibling = next_sibling.find_next_sibling()
-
-            movie_info[title] = paragraphs
-
-        return movie_info
-    else:
-        return None
-
- """
-
-def scrape_movie_data(year):
-    if not os.path.exists("./hutil/tmp"):
-        os.makedirs("./hutil/tmp")
-    
-    wiki_url = f'https://en.wikipedia.org/wiki/List_of_American_films_of_{year}'  
-
-    response = requests.get(wiki_url)
-    
+    response = requests.get(url)
     if response.status_code == 200:
+        # Save the PDF file in the "tmp" directory
+        with open(os.path.join("tmp", f"{title}.pdf"), "wb") as f:
+            f.write(response.content)
+        print(f"PDF for '{title}' saved successfully.")
+    elif response.status_code == 404:
+        print(f"Unknown page title: '{title}'.")
+    elif response.status_code == 503:
+        print("Service queue is busy or full.")
+    else:
+        print(f"An error occurred for page '{title}': {response.status_code}")
 
-        soup = BeautifulSoup(response.text, 'html.parser')
-
-
-        tables = soup.find_all('table')
-        # Initialize an empty list to store the DataFrames
-        data = []
-        for table in tables[2:6]:
-            for row in table.find_all('tr'):
-                cells = row.find_all('td')
-
-                for cell in cells:
-
-                    if cell.find('i') and cell.find('a'):
-                        link = cell.find('i').find('a')
-                        data.append(
-                            (unquote(link['href']), cell.text.strip())
-                            )
-
-        for url,title in data:
-            print(f"{year} - {url}")
-            response = requests.get('https://en.wikipedia.org' + url)
-            if response.status_code == 200:
-                html_content = response.text
-                soup = BeautifulSoup(html_content, 'html.parser')
-                json_filename = f"{title.replace('/', '-')}.json"
-                page_content = soup.get_text()
-                page_data = {
-                    "title": title,
-                    "content": page_content
-                }
-                with open(os.path.join("./hutil/tmp", json_filename), "w") as file:
-                    json.dump(page_data, file, indent=4)
-            else:
-                print("Error:", response.status_code)
-    
-         
-
-        
-
-    
-for year in range(2020, 2025):
-    scrape_movie_data(year)
-
-
-print("Completed! :)")
+# Call the function to scrape data and save PDF files
+scrape_movie_data()
