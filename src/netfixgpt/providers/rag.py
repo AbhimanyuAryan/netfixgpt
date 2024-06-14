@@ -11,7 +11,7 @@ from llama_index.embeddings.openai import OpenAIEmbedding
 from llama_index.llms.openai import OpenAI
 from llama_index.core.node_parser import SimpleNodeParser
 import tiktoken
-# from ..prompts import RecommendationPrompt
+from netfixgpt.prompts.recommendation import RecommendationPrompt
 from typing import List
 import logging
 
@@ -21,7 +21,7 @@ class RAGProvider:
         self,
         api_key,
         model: str = 'gpt-3.5-turbo',
-        persist_dir: str = "/tmp"
+        persist_dir: str = "tmp"
     ):
 
         self.model = model
@@ -45,7 +45,7 @@ class RAGProvider:
         num_output: int = 256,
         chunk_overlap_ratio: float = 0.1,
         chunk_size_limit = None,
-        input_files: List[str] = ["../butil/tmp/"]
+        input_files: str = "butil/tmp/"
     ):
 
         node_parser = SimpleNodeParser.from_defaults(
@@ -69,7 +69,7 @@ class RAGProvider:
             prompt_helper = prompt_helper
         )
 
-        documents = SimpleDirectoryReader(input_files=input_files).load_data()
+        documents = SimpleDirectoryReader(input_files).load_data()
 
         index = VectorStoreIndex.from_documents(
             documents, 
