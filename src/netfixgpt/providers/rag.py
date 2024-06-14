@@ -81,7 +81,7 @@ class RAGProvider:
     def query(
         self,
         prompt: RecommendationPrompt,
-        index_dir: str = "/tmp/"
+        index_dir: str = "tmp/"
     ) -> str:
         
         storage_context = StorageContext.from_defaults(persist_dir = index_dir)

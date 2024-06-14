@@ -3,6 +3,7 @@ import logging
 import click
 from netfixgpt.providers.rag import RAGProvider
 from netfixgpt.prompts.recommendation import RecommendationPrompt
+from netfixgpt.api import server
 import os
 
 @click.group()
@@ -58,7 +59,7 @@ def query():
     """
 
     intro_msg = """
-    \n🤔 Hey! Give me some details about your favorite types of movies
+    \n🤔 Hey! Give me some details about your favorite types of bollywood movies
 🎁 I'll then do my best to provide some awesome movie recommendations.
 🍿 Feel free to mention genres, actors, storyline aspects or movie titles!
     """.replace("\t", "")
