@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.requests import Request
 from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel, BeforeValidator
 from typing_extensions import Annotated
@@ -11,6 +12,21 @@ from netfixgpt.providers.rag import RAGProvider
 from netfixgpt.prompts.recommendation import RecommendationPrompt
 
 app = FastAPI()
+
+
+# Configure CORS
+origins = [
+    "http://localhost:3000",  # frontend URL
+    "http://localhost:8080",  # frontend URL
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],  # This allows all methods, such as GET, POST, OPTIONS, etc.
+    allow_headers=["*"],  # This allows all headers
+)
 
 MAX_PROMPT_SIZE = 250 #Avoid jailbreak prompts
 

@@ -1,5 +1,7 @@
 # Movie Recommendation System
 
+![demo](images/netfixgpt.gif)
+
 ## Goals
 
 The goals set for this project are:
