@@ -14,6 +14,29 @@ The goals set for this project are:
 
 ![CLI](images/cli_interface.png)
 
+## Web Server
+
+The web server is built using FastAPI. The usage is as follows:
+
+1. Running the server:
+
+   ```bash
+   $ cd src
+   $ poetry run netfixgpt web --host 0.0.0.0 --port 8000
+   ```
+
+2. Making curl requests:
+
+   ```bash
+   $ curl -X POST "http://0.0.0.0:8000/generate" -H "Content-Type: application/json" -d '{"details": "Movies similar to The Bhoot Police"}'
+   ```
+
+![Web Server](images/web_server.png)
+
+3. JSON response:
+
+![JSON Response](images/json_response.png)
+
 ## Technologies
 
 - ChatGPT 3.5 Turbo 0125

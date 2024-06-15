@@ -34,10 +34,10 @@ class Prompt(BaseModel):
         "json_schema_extra": {
             "examples": [
                 {
-                    "details": "Movies similar to The Godfather"
+                    "details": "Movies similar to The Bhoot Police"
                 },
                 {
-                    "details": "spiderman"
+                    "details": "Doctor G"
                 },
             ]
         }

@@ -132,11 +132,11 @@ def query():
 @click.option('--host', default='0.0.0.0', help='Host Address, defaults to 0.0.0.0')
 @click.option('--port', default='8000', help='HTTP Port for Backend, defaults to 8000')
 def web(logs: str, host: str, port: str):
-    """Runs our MovieGPT RAG App and exposes it through Fast API."""
+    """Runs our NetFixGPT RAG App and exposes it through Fast API."""
 
     logging.basicConfig(level = logs.upper())
     logging.info("Starting web server...")
-    server.run(["uvicorn", "moviegpt.api.web:app", "--host", host, "--port", port])
+    server.run(["uvicorn", "netfixgpt.api.web:app", "--host", host, "--port", port])
 
 app.add_command(name="index", cmd=create_index)
 app.add_command(name="query", cmd=query)
