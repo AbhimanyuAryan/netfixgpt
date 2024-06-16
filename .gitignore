@@ -4,3 +4,4 @@ tmp
 sentence_index
 .streamlit
 *.sqlite
+merging_index
