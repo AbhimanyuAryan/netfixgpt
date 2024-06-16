@@ -11,3 +11,6 @@
 ![](images/sentence_windows_eval.png)
 
 ### Automerging Retrieval using Trulens
+
+![Automerging](images/automerging.png)
+![Automerging Evaluation](images/automerging_eval.png)

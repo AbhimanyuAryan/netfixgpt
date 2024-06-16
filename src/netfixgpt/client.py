@@ -4,6 +4,7 @@ import click
 from netfixgpt.providers.rag import RAGProvider
 from netfixgpt.prompts.recommendation import RecommendationPrompt
 from netfixgpt.api import server
+from netfixgpt.data.util import get_movies
 import os
 
 @click.group()
@@ -21,6 +22,55 @@ def app():
             intro, fg="bright_blue"
         )
     )
+
+@click.command(name="data")
+@click.option("--start", type=int, default=2020)
+@click.option("--end", type=int, default=2024)
+@click.option("--path", type=str, default="./")
+@click.option("--sample", type=float, default=1.0)
+@click.option("--debug", type=bool, default=False, is_flag=True, help="Debug mode")
+def get_data(start: int, end: int, path: str, sample: float, debug: bool):
+    """
+    Downloads WikiData for movies.
+
+    Params:
+        start: Starting year.
+        end: Ending year.
+        path: Path where JSON file will be saved.
+        sample: Fraction of data to sample.
+        debug: Enable debug mode.
+    """
+
+    if debug:
+        logging.basicConfig(level="DEBUG")
+
+    try:
+        path = pathlib.Path(path)
+        target_path = f"{str(path)}/movies.json"
+        click.echo(
+            click.style(
+                "\n🍿 Downloading movie data...\n",
+                bold=True,
+                fg="cyan"
+            )
+        )
+
+        movies_df = get_movies(start=start, end=end)
+        if sample < 1.0:
+            movies_df = movies_df.sample(frac=sample)
+        movies_df.to_json(target_path, orient="records")
+
+        click.echo(
+            click.style(
+                f"\n✨ Successfully downloaded metadata from {len(movies_df)} movies into {target_path} 😀\n",
+                bold=True,
+                fg="white"
+            )
+        )
+
+    except Exception as exception:
+        logging.error(f"Error: {str(exception)}")
+        raise exception
 
 @click.command(name="index")
 @click.option("--input_path", type=str, default="butil/tmp/")
