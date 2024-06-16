@@ -27,6 +27,8 @@ This repository follows the structure bellow:
 - `/tests`: contains the files with the queries used for testing the various models;
 - `/tests/results`: this folder has the spreasheet containing the success percentages for each model according to the category (and a pdf with the same data for an easier observation).
 
+Additionally thr final article for this project can be found under `Article.pdf`!
+
 ## Goals
 
 The goals set for this project are:
