@@ -1,7 +1,7 @@
 .env
 __pycache__
-tmp
 sentence_index
 .streamlit
 *.sqlite
 merging_index
+index-tmp
