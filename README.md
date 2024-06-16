@@ -1,6 +1,30 @@
 # Movie Recommendation System
 
-![demo](images/netfixgpt.gif)
+## Group 8
+
+|Name|Number|
+|---|---|
+|Abhimanyu Aryan|pg51632|
+|Millena Santos|pg54107|
+|Ricardo Oliveira|pg54177|
+
+## Repository Structure
+
+This repository follows the structure bellow:
+
+- `/images`: media files used in this README;
+- `/netfixgpt-frontend`: the code base for the GUI application;
+- `/presentations`: material used for the presentations. 'p1' refers to the initial pitch of the idea, 'p2' contains the file for the final presentation;
+- `/src`: contains the main code base for this project;
+- `/src/brutil`: folder containing the brazillian movie data scraper;
+- `/src/brutil/tmp`: folder containing the the data corresponding to brazillian movies;
+- `/src/butil`: folder containing the bollywood movie data scraper;
+- `/src/butil/tmp`: folder containing the the data corresponding to bollywood movies;
+- `/src/hutil`: folder containing the hollywood movie data scraper;
+- `/src/hutil/tmp`: folder containing the the data corresponding to hollywood movies;
+- `/src/evaluation`: this is our evaluation pipeline to understand how development affects our models;
+- `/src/netfixgpt`: this is the source to our model and rag pipeline;
+- `/tests`: contains the files with the queries used for testing the various models. Additionally this folder has the file 'results', this is the spreasheet containing the success percentages for each model according to the category.
 
 ## Goals
 
@@ -15,6 +39,10 @@ The goals set for this project are:
 ## Command Line Interace
 
 ![CLI](images/cli_interface.png)
+
+# Guided User Interface
+
+![demo](images/netfixgpt.gif)
 
 ## Web Server
 
