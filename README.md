@@ -24,7 +24,8 @@ This repository follows the structure bellow:
 - `/src/hutil/tmp`: folder containing the the data corresponding to hollywood movies;
 - `/src/evaluation`: this is our evaluation pipeline to understand how development affects our models;
 - `/src/netfixgpt`: this is the source to our model and rag pipeline;
-- `/tests`: contains the files with the queries used for testing the various models. Additionally this folder has the file 'results', this is the spreasheet containing the success percentages for each model according to the category.
+- `/tests`: contains the files with the queries used for testing the various models;
+- `/tests/results`: this folder has the spreasheet containing the success percentages for each model according to the category (and a pdf with the same data for an easier observation).
 
 ## Goals
 
